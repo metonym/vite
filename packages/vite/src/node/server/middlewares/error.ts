@@ -68,20 +68,9 @@ export function errorMiddleware(
     if (allowNext) {
       next()
     } else {
-      if (err instanceof AccessRestrictedError) {
-        res.statusCode = 403
-        res.write(renderErrorHTML(err.message))
-        res.end()
-      }
       res.statusCode = 500
       res.end()
     }
-  }
-}
-
-export class AccessRestrictedError extends Error {
-  constructor(msg: string) {
-    super(msg)
   }
 }
 

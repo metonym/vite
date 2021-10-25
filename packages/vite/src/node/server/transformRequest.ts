@@ -17,7 +17,7 @@ import {
 import { checkPublicFile } from '../plugins/asset'
 import { ssrTransform } from '../ssr/ssrTransform'
 import { injectSourcesContent } from './sourcemap'
-import { isFileServingAllowed } from './middlewares/static'
+import { isFileServingRestricted } from './middlewares/static'
 import { performance } from 'perf_hooks'
 
 const debugLoad = createDebugger('vite:load')
@@ -107,7 +107,7 @@ async function doTransform(
     // as string
     // only try the fallback if access is allowed, skip for out of root url
     // like /service-worker.js or /api/users
-    if (options.ssr || isFileServingAllowed(file, server)) {
+    if (options.ssr || !isFileServingRestricted(file, server)) {
       try {
         code = await fs.readFile(file, 'utf-8')
         isDebug && debugLoad(`${timeFrom(loadStart)} [fs] ${prettyUrl}`)
